@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Ensures optimal rendering on mobile devices. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- Optimal Internet Explorer compatibility -->
+  </head>
+
+  <body>
+    <!-- <script src="https://www.paypal.com/sdk/js?client-id=AR2ZBQlFwGgNKBpfZefzEw68t9k2AdmR-fP0NnZpVlXndyiD1S-ZeiWaHIQlU7uKo4IhHodGyN-JLqQ8"> // Replace YOUR_CLIENT_ID with your sandbox client ID
+    </script>
+
+    <div id="paypal-button-container"></div> -->
+
+    <script>
+      function pay() {
+        console.log('paypal buttons create order.');
+        fetch("http://localhost:3000/orders", {
+            method: "post",
+            headers: {
+              "content-type": "application/json"
+            }
+          }).then(res => {
+            return res.json();
+          }).then(order => {
+            for (let i in order.result.links) {
+              if (order.result.links[i].rel === "approve") {
+                  window.open(order.result.links[i].href, "_self");
+                  break;
+              }
+          }
+          });
+      }
+    </script>
+
+    <button onclick="pay()">Pay</button>
+
+    <!-- Add the checkout buttons, set up the order and approve the order -->
+    <script>
+      
+      // paypal.Buttons({
+      //   createOrder: function() {
+      //     // return actions.order.create({
+      //     //   purchase_units: [{
+      //     //     amount: {
+      //     //       value: '0.01'
+      //     //     }
+      //     //   }]
+      //     // });
+      //     console.log('paypal buttons create order.');
+      //     return fetch("http://localhost:3000/orders", {
+      //       method: "post",
+      //       headers: {
+      //         "content-type": "application/json"
+      //       }
+      //     }).then(res => {
+      //       return res.json();
+      //     }).then(order => {
+      //       for (let i in order.result.links) {
+      //         if (order.result.links[i].rel === "capture") {
+      //             window.open(order.result.links[i].href, "_self");
+      //             break;
+      //         }
+      //     }
+      //     });
+      //   },
+      //   onApprove: function(data, actions) {
+      //     return actions.order.capture().then(function(details) {
+      //       alert('Transaction completed by ' + details.payer.name.given_name);
+      //     });
+      //   }
+      // }).render('#paypal-button-container'); // Display payment options on your web page
+    </script>
+  </body>
+</html>
